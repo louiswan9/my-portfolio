@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>幸運轉轉機</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --line:#5A3A4A; --ink:#5A3A4A; --panel:#FFF6E5; --panel2:#FFE3EF; --panel3:#FFFFFF;
+  --pink:#FF6FA8; --yellow:#FFD84D; --mint:#3DDC97; --sky:#4DA6FF; --grape:#A06CFF;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){ --ink:#FFF0F5; --panel:#46304F; --panel2:#583E64; --panel3:#6A4C78; --line:#2B1633; }
+}
+:root[data-theme="dark"]{ --ink:#FFF0F5; --panel:#46304F; --panel2:#583E64; --panel3:#6A4C78; --line:#2B1633; }
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;height:100%;background:#FFB6D5;color:var(--ink);overflow:hidden;
+  font-family:'Huninn','Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation;
+}
+button{font-family:inherit;color:inherit}
+button:focus-visible{outline:4px solid #fff;outline-offset:2px;box-shadow:0 0 0 7px var(--grape)}
+
+/* ---------- 背景 ---------- */
+#bg{position:fixed;inset:0;z-index:0}
+.bgl{position:absolute;inset:0;opacity:0;transition:opacity .9s}
+body[data-stage="1"] .l1,body[data-stage="2"] .l2,body[data-stage="3"] .l3,body[data-stage="4"] .l4{opacity:1}
+.l1{background:linear-gradient(#FFA9D3 0%,#FFD0E6 55%,#FFF1F6 100%)}
+.l1::before{content:'';position:absolute;inset:0;
+  background:
+   radial-gradient(70px 30px at 18% 14%,rgba(255,255,255,.95) 62%,transparent 64%),
+   radial-gradient(46px 26px at 26% 17%,rgba(255,255,255,.95) 62%,transparent 64%),
+   radial-gradient(90px 36px at 78% 30%,rgba(255,255,255,.9) 62%,transparent 64%),
+   radial-gradient(56px 28px at 70% 33%,rgba(255,255,255,.9) 62%,transparent 64%),
+   radial-gradient(70px 30px at 40% 78%,rgba(255,255,255,.8) 62%,transparent 64%);
+  animation:drift 40s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+.l2{background:linear-gradient(#8FE6FF 0%,#D4FFE6 55%,#7EE3A8 100%)}
+.l2::before{content:'';position:absolute;left:-10%;right:-10%;bottom:-6%;height:46%;
+  background:
+   radial-gradient(60% 90% at 25% 100%,#56D98F 60%,transparent 61%),
+   radial-gradient(55% 80% at 80% 100%,#3DC77E 60%,transparent 61%)}
+.l2::after{content:'';position:absolute;inset:0;
+  background:
+   radial-gradient(10px 10px at 12% 62%,#FFE96B 60%,transparent 62%),
+   radial-gradient(8px 8px at 86% 70%,#FF8FBE 60%,transparent 62%),
+   radial-gradient(9px 9px at 40% 88%,#fff 60%,transparent 62%),
+   radial-gradient(60px 26px at 80% 12%,rgba(255,255,255,.9) 62%,transparent 64%)}
+.l3{background:linear-gradient(#FF8CB4 0%,#FFB26E 58%,#FFE08A 100%)}
+.l3::before{content:'';position:absolute;inset:0;
+  background:
+   radial-gradient(34px 34px at 12% 82%,#FF6FA8 58%,#fff 60%,#fff 66%,transparent 68%),
+   radial-gradient(26px 26px at 90% 76%,#A06CFF 58%,#fff 60%,#fff 66%,transparent 68%),
+   radial-gradient(22px 22px at 84% 22%,#FFD84D 58%,#fff 60%,#fff 66%,transparent 68%),
+   radial-gradient(18px 18px at 8% 24%,#3DDC97 58%,#fff 60%,#fff 66%,transparent 68%)}
+.l4{background:linear-gradient(#2A1A5E 0%,#5937A6 62%,#9B6BF0 100%)}
+.l4::before{content:'';position:absolute;inset:0;
+  background-image:
+   radial-gradient(2px 2px at 20px 30px,#fff 50%,transparent 52%),
+   radial-gradient(1.6px 1.6px at 90px 120px,#FFE9A8 50%,transparent 52%),
+   radial-gradient(2.4px 2.4px at 160px 60px,#fff 50%,transparent 52%),
+   radial-gradient(1.6px 1.6px at 60px 190px,#fff 50%,transparent 52%),
+   radial-gradient(2px 2px at 200px 170px,#FFD1EA 50%,transparent 52%);
+  background-size:230px 230px;animation:twinkle 4s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.55}to{opacity:1}}
+
+/* ---------- 版面 ---------- */
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;max-width:1060px;margin:0 auto}
+#top{display:flex;align-items:center;gap:8px;padding:10px 12px 4px;flex:none}
+.chip{background:var(--panel);border:3px solid var(--line);border-radius:999px;padding:3px 12px;font-weight:700;
+  box-shadow:0 3px 0 var(--line);display:flex;align-items:center;gap:6px;white-space:nowrap;min-height:38px}
+#coinChip b{font-size:20px;min-width:2.2ch;text-align:right}
+#coinChip.bump{animation:bump .25s}
+@keyframes bump{50%{transform:scale(1.14)}}
+#logo{flex:1;text-align:center;font-size:20px;font-weight:700;color:#fff;
+  text-shadow:0 3px 0 var(--line),2px 0 0 var(--line),-2px 0 0 var(--line),0 -2px 0 var(--line);letter-spacing:.08em;white-space:nowrap}
+.rbtn{width:42px;height:42px;border-radius:50%;border:3px solid var(--line);background:var(--panel);font-size:20px;cursor:pointer;
+  box-shadow:0 4px 0 var(--line);display:grid;place-items:center;padding:0;transition:transform .08s,box-shadow .08s}
+.rbtn:active{transform:translateY(4px);box-shadow:0 0 0 var(--line)}
+#stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+#play{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 12px 6px}
+#bars{width:100%;display:flex;gap:8px;align-items:center}
+#stageChip{font-size:14px;min-height:30px;padding:2px 12px;background:var(--yellow);color:#5A3A4A}
+#luckWrap{flex:1;display:none;align-items:center;gap:8px;background:var(--panel);border:3px solid var(--line);border-radius:999px;padding:2px 10px;min-height:30px;box-shadow:0 3px 0 var(--line)}
+#luckWrap.on{display:flex}
+#luckWrap span{font-size:13px;font-weight:700;white-space:nowrap}
+#luckTrack{flex:1;height:14px;border-radius:999px;background:rgba(90,58,74,.18);border:2px solid var(--line);overflow:hidden}
+#luckFill{height:100%;width:0;background:linear-gradient(#8DFFC8,#3DDC97);border-radius:999px;transition:width .3s}
+#luckWrap.full #luckFill{background:linear-gradient(#FFF08A,#FFB800);animation:glow .6s infinite alternate}
+#luckWrap.full{box-shadow:0 0 0 3px #FFD84D,0 3px 0 var(--line)}
+@keyframes glow{to{filter:brightness(1.25)}}
+#luckNum{font-size:13px;font-weight:700;min-width:3.2ch;text-align:right}
+#narrator{width:100%;display:flex;align-items:center;gap:8px;min-height:66px}
+#rabbit{width:62px;height:62px;flex:none;animation:bob 2.6s ease-in-out infinite}
+#rabbit.hop{animation:hop .5s}
+@keyframes bob{50%{transform:translateY(-3px)}}
+@keyframes hop{30%{transform:translateY(-12px) rotate(-5deg)}60%{transform:translateY(0) rotate(3deg)}}
+#bubble{position:relative;flex:1;background:var(--panel);border:3px solid var(--line);border-radius:18px;padding:8px 12px;font-size:15px;line-height:1.35;
+  box-shadow:0 4px 0 var(--line);min-height:50px;display:flex;align-items:center}
+#bubble::before{content:'';position:absolute;left:-11px;top:50%;margin-top:-8px;border:8px solid transparent;border-right:10px solid var(--line);border-left:0}
+#bubble::after{content:'';position:absolute;left:-6px;top:50%;margin-top:-5px;border:5px solid transparent;border-right:7px solid var(--panel);border-left:0}
+#bubble.pop{animation:pop .3s}
+@keyframes pop{from{transform:scale(.92)}to{transform:scale(1)}}
+#wheelWrap{position:relative;flex:none;margin-top:2px}
+#wheel{display:block}
+#wheelWrap.tense{animation:shake .12s infinite}
+#wheelWrap.tense::after{content:'';position:absolute;inset:-8%;border-radius:50%;background:radial-gradient(circle,transparent 55%,rgba(30,0,50,.38) 100%);pointer-events:none}
+#wheelWrap.stuck{animation:shake .18s infinite}
+@keyframes shake{25%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,2px)}}
+#floaters{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:5}
+.fl{position:absolute;transform:translateX(-50%);font-weight:700;font-size:26px;color:#fff;white-space:nowrap;
+  text-shadow:0 3px 0 var(--line),2px 0 0 var(--line),-2px 0 0 var(--line),0 -2px 0 var(--line);animation:floatUp 1.3s ease-out forwards}
+.fl.gain{color:#FFE45C}.fl.loss{color:#C9B2FF}.fl.good{color:#7DFFC0;font-size:30px}.fl.ok{color:#9FD2FF}.fl.miss{color:#ddd;font-size:20px}
+.fl.big{font-size:22px;color:#fff;animation-duration:2.2s}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}15%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-64px) scale(1)}}
+#fxpill{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);display:none;align-items:center;gap:8px;background:var(--panel);
+  border:3px solid var(--line);border-radius:999px;padding:2px 12px;font-size:13px;font-weight:700;white-space:nowrap;box-shadow:0 3px 0 var(--line);z-index:6}
+#fxpill.on{display:flex}
+#fxTrack{width:70px;height:10px;border-radius:999px;border:2px solid var(--line);overflow:hidden;background:rgba(90,58,74,.18)}
+#fxFill{height:100%;background:linear-gradient(#FFF08A,#FFB800)}
+#btnWrap{position:relative;width:min(270px,72vw);height:74px;margin:8px auto 4px;flex:none}
+#spinBtn{position:relative;width:100%;height:100%;font-size:30px;font-weight:700;color:#fff;letter-spacing:.12em;cursor:pointer;
+  background:linear-gradient(#FF93C1,#FF4F96);border:4px solid var(--line);border-radius:999px;
+  box-shadow:0 8px 0 #B02E6A,0 8px 0 4px var(--line),0 16px 20px rgba(90,20,60,.28);
+  text-shadow:0 2px 0 rgba(90,30,60,.55);transition:transform .08s,box-shadow .08s}
+#spinBtn::after{content:'';position:absolute;left:12%;right:12%;top:7%;height:34%;border-radius:999px;background:linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.05));pointer-events:none}
+#spinBtn:active,#spinBtn.press{transform:translateY(6px);box-shadow:0 2px 0 #B02E6A,0 2px 0 4px var(--line),0 4px 8px rgba(90,20,60,.28)}
+#spinBtn.busy{background:linear-gradient(#FFB7D4,#F477AD)}
+#spinBtn.auto{background:linear-gradient(#8DFFC8,#2CC98A);box-shadow:0 8px 0 #1C8F63,0 8px 0 4px var(--line),0 16px 20px rgba(20,90,60,.25);font-size:26px}
+#spinBtn.fix{background:linear-gradient(#FFE97A,#FFB800);box-shadow:0 8px 0 #B97F00,0 8px 0 4px var(--line);font-size:24px}
+#ring,#ringTarget{position:absolute;inset:-4px -8px -16px -8px;border-radius:999px;pointer-events:none;opacity:0}
+#ringTarget{border:4px dashed #fff;box-shadow:0 0 0 3px var(--line)}
+#ring{border:6px solid #FFE45C;box-shadow:0 0 14px 2px rgba(255,228,92,.9),0 0 0 3px var(--line);transform-origin:center}
+#ring.perfect{border-color:#7DFFC0}
+#shop{flex:1 1 auto;min-height:170px;overflow-y:auto;padding:6px 12px 20px;overscroll-behavior:contain}
+#shop h2{margin:6px 4px 8px;font-size:18px;color:#fff;text-shadow:0 2px 0 var(--line),1.5px 0 0 var(--line),-1.5px 0 0 var(--line),0 -1.5px 0 var(--line);letter-spacing:.08em}
+#shopList{display:grid;gap:10px}
+.card{display:flex;align-items:center;gap:10px;text-align:left;width:100%;cursor:pointer;
+  background:var(--panel);border:3px solid var(--line);border-radius:18px;padding:8px 10px;box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s,filter .2s}
+.card:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.cic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:linear-gradient(#FFF2A8,#FFD84D);border:3px solid var(--line);box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.ctx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cn{font-size:16px}
+.cd{font-size:12.5px;opacity:.82;line-height:1.3}
+.cp{flex:none;min-width:64px;text-align:center;font-weight:700;font-size:16px;border:3px solid var(--line);border-radius:999px;padding:3px 8px;background:#FFD84D;color:#5A3A4A;box-shadow:0 3px 0 var(--line)}
+.card.poor .cp{background:#E5D9EA;color:#7a6483}
+.card.can{animation:wiggle 1.6s ease-in-out infinite}
+@keyframes wiggle{0%,86%,100%{transform:none}90%{transform:translateY(-4px)}95%{transform:translateY(0)}}
+.card.owned{opacity:.6;cursor:default}
+.card.owned .cp{background:#9BF0C6}
+.card.locked{filter:grayscale(1);opacity:.55;cursor:not-allowed}
+.card.locked .cic{background:#ccc}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:60;width:100%;height:100%}
+#toasts{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 56px);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:70;pointer-events:none}
+.toast{background:var(--yellow);color:#5A3A4A;border:3px solid var(--line);border-radius:999px;padding:6px 16px;font-weight:700;box-shadow:0 4px 0 var(--line);animation:toastIn 3.2s forwards}
+@keyframes toastIn{0%{opacity:0;transform:translateY(-16px) scale(.8)}8%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+#modal{position:fixed;inset:0;z-index:80;background:rgba(58,20,64,.58);display:none;place-items:center;padding:16px}
+#modal.on{display:grid}
+.sheet{width:min(430px,100%);max-height:88vh;overflow:auto;background:var(--panel);border:4px solid var(--line);border-radius:26px;padding:18px 18px 20px;box-shadow:0 8px 0 var(--line);animation:sheetIn .3s}
+@keyframes sheetIn{from{transform:scale(.85);opacity:0}}
+.sheet h3{margin:0 0 10px;font-size:22px;text-align:center}
+.sheet .crown{font-size:56px;text-align:center;animation:bob 1.6s ease-in-out infinite}
+.row{display:flex;justify-content:space-between;gap:12px;padding:6px 4px;border-bottom:2px dashed rgba(90,58,74,.25);font-size:15px}
+.row b{white-space:nowrap}
+.ach{display:flex;gap:8px;align-items:center;padding:6px 4px;font-size:14px}
+.ach.lock{opacity:.5;filter:grayscale(1)}
+.ach i{font-style:normal;font-size:22px}
+.btn{display:block;margin:14px auto 0;min-width:170px;padding:10px 22px;font-size:18px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(#FF93C1,#FF4F96);border:4px solid var(--line);border-radius:999px;box-shadow:0 6px 0 var(--line);text-shadow:0 2px 0 rgba(90,30,60,.5);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--line)}
+.btn.alt{background:linear-gradient(#fff,#ffe3ef);color:#5A3A4A;text-shadow:none}
+.btn.warn{background:linear-gradient(#C9B2FF,#8F63F0)}
+#debug{position:fixed;left:8px;bottom:8px;z-index:90;display:none;flex-wrap:wrap;gap:4px;max-width:260px;background:rgba(0,0,0,.7);padding:6px;border-radius:12px}
+#debug.on{display:flex}
+#debug button{font-size:12px;padding:4px 8px;border-radius:8px;border:0;background:#fff;cursor:pointer}
+
+@media (min-width:900px){
+  #stage{display:grid;grid-template-columns:minmax(0,1fr) 390px;overflow:hidden;gap:8px}
+  #play{overflow-y:auto;padding-top:10px}
+  #shop{overflow-y:auto;padding:10px 14px 20px 6px}
+}
+@media (max-width:380px){ #logo{display:none} .chip{padding:3px 9px} }
+@media (prefers-reduced-motion:reduce){
+  .bgl::before,.bgl::after,#rabbit,.card.can{animation:none!important}
+}
+body.reduce #wheelWrap.tense,body.reduce #wheelWrap.stuck,body.reduce #rabbit,body.reduce .card.can,body.reduce .bgl::before{animation:none!important}
+</style>
+</head>
+<body data-stage="1">
+<div id="bg"><div class="bgl l1"></div><div class="bgl l2"></div><div class="bgl l3"></div><div class="bgl l4"></div></div>
+
+<div id="app">
+  <header id="top">
+    <div class="chip" id="coinChip"><span>🪙</span><b id="coinTxt">0</b></div>
+    <div id="logo">幸運轉轉機</div>
+    <div class="chip" id="timeTxt">0:00</div>
+    <button class="rbtn" id="btnStats" aria-label="統計與成就">🏆</button>
+    <button class="rbtn" id="btnSet" aria-label="設定">⚙️</button>
+  </header>
+
+  <main id="stage">
+    <section id="play">
+      <div id="bars">
+        <div class="chip" id="stageChip">階段 1・手動期</div>
+        <div id="luckWrap"><span>🍀 幸運值</span><div id="luckTrack"><div id="luckFill"></div></div><span id="luckNum">0</span></div>
+      </div>
+      <div id="narrator">
+        <div id="rabbit" aria-hidden="true"></div>
+        <div id="bubble" aria-live="polite"></div>
+      </div>
+      <div id="wheelWrap">
+        <canvas id="wheel" aria-label="幸運輪盤"></canvas>
+        <div id="floaters"></div>
+        <div id="fxpill"><span id="fxName"></span><div id="fxTrack"><div id="fxFill"></div></div></div>
+      </div>
+      <div id="btnWrap">
+        <div id="ringTarget"></div>
+        <div id="ring"></div>
+        <button id="spinBtn">轉！</button>
+      </div>
+    </section>
+    <aside id="shop">
+      <h2>升級商店</h2>
+      <div id="shopList"></div>
+    </aside>
+  </main>
+</div>
+
+<canvas id="fx"></canvas>
+<div id="toasts"></div>
+<div id="modal"><div class="sheet" id="sheet"></div></div>
+<div id="debug"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================
+   設定表：所有數值集中在這裡，方便調整
+   ===================================================== */
+const CFG = {
+  candy: 10, gem: 50,
+  thiefPct: 0.10, thiefMin: 5, thiefMax: 100,
+  luckPerSpin: 0.3, luckStar: 3, luckMeteor: 10, luckMax: 100,
+  manualDur: 3.5, autoBase: [3.0, 2.5, 2.0], pauseAfter: 0.5,
+  goldDur: 30, goldMul: 3, rainbowDur: 20, rainbowFactor: 0.6,
+  gemRainSpins: 3, stuckMax: 5, stuckTaps: 5, stuckReward: 100,
+  candyRainPct: 0.15, candyRainMin: 20,
+  perfectWin: 0.10, goodWin: 0.20,
+  bigStep: 0.5,
+  nearExtra: 1.6, finalExtra: 2.4, nearCooldown: 6
+};
+
+const TYPES = {
+  C:{name:'糖果',  icon:'🍬', color:'#FF6FA8', rank:5},
+  G:{name:'寶石',  icon:'💎', color:'#FFD84D', rank:6},
+  A:{name:'空氣泡',icon:'💨', color:'#BFE3FF', rank:2},
+  T:{name:'小偷',  icon:'🦝', color:'#9A86B5', rank:1},
+  E:{name:'事件',  icon:'🎁', color:'#4DA6FF', rank:3},
+  S:{name:'星星',  icon:'⭐', color:'#3DDC97', rank:4},
+  F:{name:'終極',  icon:'👑', color:'#A06CFF', rank:0}
+};
+
+/* 各階段：扇形排列順序（固定）與各類型面積 % */
+const STAGES = [null,
+  { name:'手動期', order:['C','A','T','C','F','A','T','C'],
+    areas:{C:55, A:30, T:14.98, F:0.02} },
+  { name:'自動期', order:['C','G','A','T','C','E','A','C','T','G','C','F'],
+    areas:{C:52, G:10, A:22, T:9, E:6.95, F:0.05} },
+  { name:'成長期', order:['C','G','A','S','C','E','T','C','G','S','A','C','E','G','C','F'],
+    areas:{C:47.95, G:14, A:14, T:6, E:8, S:10, F:0.05} },
+  { name:'衝刺期', order:['C','G','S','C','E','G','A','C','S','C','T','G','C','E','S','C','G','C','C','F'],
+    areas:{C:49.6, G:18, A:8, T:2, E:10, S:12, F:0.4} }
+];
+
+const UPS = [
+  {id:'auto',     ic:'🤖', name:'自動旋轉',     desc:'輪盤自己轉！間隔 3.0 秒',          price:170,  stage:1, fx:()=>setStage(2)},
+  {id:'speed1',   ic:'⚡', name:'旋轉加速 I',   desc:'自動間隔縮短為 2.5 秒',            price:140,  stage:2, req:'auto'},
+  {id:'candy1',   ic:'🍭', name:'糖果加成 I',   desc:'糖果與寶石的金幣 ×1.5',            price:170,  stage:2},
+  {id:'expand',   ic:'🛠️', name:'輪盤擴建',     desc:'增至 16 格，加入星星格',           price:420,  stage:2, fx:()=>setStage(3)},
+  {id:'speed2',   ic:'🚀', name:'旋轉加速 II',  desc:'自動間隔縮短為 2.0 秒',            price:260,  stage:3, req:'speed1'},
+  {id:'swapThief',ic:'🧺', name:'換格：小偷→糖果', desc:'所有小偷格變成糖果格',          price:340,  stage:3},
+  {id:'candy2',   ic:'🍬', name:'糖果加成 II',  desc:'糖果與寶石的金幣 ×2',              price:420,  stage:3, req:'candy1'},
+  {id:'lens',     ic:'🔭', name:'命運放大鏡',   desc:'清掉大部分垃圾格，終極格變大',     price:680,  stage:3, fx:()=>setStage(4)},
+  {id:'swapAir',  ic:'🎀', name:'換格：空氣泡→糖果', desc:'所有空氣泡格變成糖果格',      price:680,  stage:4},
+  {id:'big1',     ic:'🔍', name:'放大終極格 I', desc:'終極格面積 +0.5%',                 price:850,  stage:4},
+  {id:'big2',     ic:'🔎', name:'放大終極格 II',desc:'終極格面積再 +0.5%',               price:1360, stage:4, req:'big1'},
+  {id:'big3',     ic:'💫', name:'放大終極格 III',desc:'終極格面積再 +0.5%',              price:2040, stage:4, req:'big2'}
+];
+
+const EVT = {
+  gold:     {name:'黃金時刻', icon:'🌟', desc:'30 秒內收益 ×3'},
+  rainbow:  {name:'彩虹加速', icon:'🌈', desc:'20 秒自動旋轉加快'},
+  meteor:   {name:'幸運流星', icon:'☄️', desc:'幸運值 +10'},
+  candyrain:{name:'糖果雨',   icon:'🍬', desc:'天降金幣'},
+  gemrain:  {name:'寶石雨',   icon:'💎', desc:'接下來 3 轉糖果當寶石'},
+  stuck:    {name:'輪盤卡住', icon:'🔧', desc:'快連點修理！'}
+};
+
+const ACH = [
+  {id:'lucky',   name:'天選之人', desc:'在階段 3 之前通關'},
+  {id:'thief',   name:'小偷剋星', desc:'用時機點擊躲開 5 次小偷'},
+  {id:'near',    name:'差一點先生', desc:'累計 3 次近失'},
+  {id:'unlucky', name:'倒楣三連', desc:'連續 3 次空氣泡格或小偷格'},
+  {id:'perfect', name:'手速達人', desc:'累計 10 次完美時機'},
+  {id:'zen',     name:'佛系玩家', desc:'自動旋轉時連續 60 秒不點擊'},
+  {id:'rich',    name:'小富翁',   desc:'同時持有 1000 金幣'},
+  {id:'fast',    name:'效率之神', desc:'在 8 分鐘內通關'}
+];
+
+const LINES = {
+  open:   ['歡迎來到轉轉機！按下那個大按鈕吧～'],
+  air:    ['又空了？沒關係，命運正在醞釀！','空氣泡泡，輕飄飄～','這格……是在放空嗎？'],
+  thief:  ['哇啊，小偷！我的錢包～','有人偷錢！快抓住他！','嗚嗚，錢包瘦了一圈。'],
+  dodge:  ['手速不錯嘛，這招叫做「閃現」！','躲過小偷！漂亮！'],
+  gem:    ['亮晶晶！今天是你的幸運日。','寶石！收下收下～','哇，閃到我的眼睛了！'],
+  candy:  ['甜甜的～','叮噹！','收穫一點點。'],
+  star:   ['幸運值上升！命運在靠近～','星星閃閃，好運滿滿。'],
+  perfect:['完美時機！','節奏感滿分！'],
+  event:  ['有事發生了，快看上面！','是事件！會是好事還是壞事呢？'],
+  buy:    ['輪盤變厲害啦，感覺有點不一樣了。','錢花得好！','升級完成，繼續轉吧～'],
+  stage:  ['輪盤升級！新世界來囉～'],
+  near:   ['等等等等……差一點點！我心臟要停了。','好險好險！','就差那麼一點點點點！'],
+  luckfull:['命運已經蓄滿力了，下一轉是你的！'],
+  stuck:  ['輪盤卡住啦！快點點按鈕修理它！'],
+  fixed:  ['修好了！給你獎勵～'],
+  stuckfail:['它自己修好了，沒有損失～'],
+  win:    ['你做到了！轉轉兔宣布：你是命運的主人！']
+};
+
+/* =====================================================
+   工具
+   ===================================================== */
+const $ = s => document.querySelector(s);
+const TAU = Math.PI * 2;
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const rand = (a,b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const smooth = x => { x = clamp(x,0,1); return x*x*(3-2*x); };
+const norm = r => ((r % TAU) + TAU) % TAU;
+const fmt = n => Math.round(n).toLocaleString('en-US');
+
+/* ---------- 存檔 ---------- */
+const KEY = 'lucky-spin-v1';
+function freshState(){
+  let reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+  return { v:1, coins:0, stage:1, up:{}, luck:0, spins:0, perfects:0, near:0, dodged:0, maxCoins:0,
+           t:0, ach:{}, bad:0, lastNear:-99, finished:false, opt:{mute:false, reduce:reduce} };
+}
+function loadSave(){
+  try { const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch(e){ return null; }
+}
+function saveNow(){
+  state.t = G;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+}
+
+/* =====================================================
+   狀態
+   ===================================================== */
+let state = freshState();
+{
+  const s = loadSave();
+  if (s && s.v === 1 && !s.finished) state = Object.assign(freshState(), s, {opt:Object.assign(freshState().opt, s.opt||{})});
+  else if (s && s.finished) { state.ach = s.ach || {}; state.opt = Object.assign(state.opt, s.opt||{}); }
+}
+let started = state.spins > 0;   // 按下第一次「轉！」才開始計時
+let G = state.t || 0;            // 遊戲時鐘（秒）
+let speedMul = 1;                // 測試模式用
+let wedges = [];
+let wheelRot = 0;
+let spin = null;
+let effect = null;               // 單一事件效果
+let autoNext = 0;
+let wheelDirty = false;
+let lastClickG = G;
+let lastIdx = -1;
+let pointerA = 0, pointerV = 0;
+let popScale = 0, popV = 0;
+let hubPop = 0, lastIcon = '⭐';
+let hl = null;                   // 結果格高亮
+let luckAnnounced = state.luck >= CFG.luckMax;
+let ghostSpeed = 0;
+
+/* =====================================================
+   音效（Web Audio 即時合成）
+   ===================================================== */
+let AC = null;
+function ac(){
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ AC = null; } }
+  if (AC && AC.state === 'suspended') { try { AC.resume(); } catch(e){} }
+  return AC;
+}
+function tone(freq, dur, type, vol, slideTo, delay){
+  if (state.opt.mute) return;
+  const c = ac(); if (!c) return;
+  const t = c.currentTime + (delay || 0);
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type || 'sine';
+  o.frequency.setValueAtTime(freq, t);
+  if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol || 0.1, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t); o.stop(t + dur + 0.03);
+}
+const sfx = {
+  _t:0,
+  tick(spd){ const n = performance.now(); if (n - this._t < 32) return; this._t = n;
+             tone(200 + clamp(spd,0,30) * 20, 0.05, 'triangle', 0.1); },
+  coin(){ tone(988,.09,'square',.06); tone(1319,.16,'square',.06,null,.08); },
+  gem(){ [1047,1319,1568,2093].forEach((f,i)=>tone(f,.15,'triangle',.1,null,i*.07)); },
+  thief(){ tone(420,.35,'sawtooth',.07,110); tone(300,.3,'square',.04,90,.12); },
+  air(){ tone(520,.28,'sine',.06,240); },
+  star(){ tone(784,.1,'triangle',.1); tone(1175,.2,'triangle',.1,null,.09); },
+  event(){ [523,659,784].forEach((f,i)=>tone(f,.12,'square',.06,null,i*.06)); },
+  buy(){ [523,659,784,1047].forEach((f,i)=>tone(f,.14,'triangle',.1,null,i*.07)); },
+  perfect(){ tone(1568,.1,'sine',.12); tone(2093,.22,'sine',.1,null,.07); },
+  good(){ tone(880,.12,'sine',.09); },
+  miss(){ tone(200,.12,'sine',.05); },
+  heart(){ tone(70,.14,'sine',.35); tone(60,.16,'sine',.3,null,.17); },
+  stage(){ [392,523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.11,null,i*.09)); },
+  fix(){ tone(660,.08,'square',.06); },
+  fanfare(){ [523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,.28,'triangle',.12,null,i*.12));
+             [262,330,392].forEach((f,i)=>tone(f,.9,'sine',.1,null,.9+i*.02)); },
+  deny(){ tone(180,.15,'square',.05); }
+};
+
+/* =====================================================
+   紙花粒子
+   ===================================================== */
+const fxc = $('#fx'), fx = fxc.getContext('2d');
+let parts = [];
+function sizeFx(){ fxc.width = window.innerWidth; fxc.height = window.innerHeight; }
+function burst(x, y, n, o){
+  o = o || {};
+  if (state.opt.reduce) n = Math.ceil(n * 0.3);
+  const cols = o.colors || ['#FF6FA8','#FFD84D','#3DDC97','#4DA6FF','#A06CFF','#ffffff'];
+  for (let i = 0; i < n; i++){
+    const a = o.full ? rand(0, TAU) : rand(-Math.PI*0.95, -Math.PI*0.05);
+    const sp = rand(120, o.power || 420);
+    parts.push({ x, y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, r:rand(0,TAU), vr:rand(-9,9),
+                 s:rand(5,11), c:pick(cols), life:rand(1.1,2.2), age:0, round:Math.random()<0.3 });
+  }
+}
+function stepFx(dt){
+  fx.clearRect(0,0,fxc.width,fxc.height);
+  for (let i = parts.length - 1; i >= 0; i--){
+    const p = parts[i];
+    p.age += dt; if (p.age > p.life){ parts.splice(i,1); continue; }
+    p.vy += 720 * dt; p.vx *= (1 - 0.6*dt);
+    p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt;
+    fx.globalAlpha = clamp(1.6 - p.age / p.life * 1.6, 0, 1);
+    fx.fillStyle = p.c;
+    fx.save(); fx.translate(p.x, p.y); fx.rotate(p.r);
+    if (p.round){ fx.beginPath(); fx.arc(0,0,p.s*0.5,0,TAU); fx.fill(); }
+    else fx.fillRect(-p.s/2, -p.s/3, p.s, p.s*0.66);
+    fx.restore();
+  }
+  fx.globalAlpha = 1;
+}
+function wheelCenter(){
+  const r = $('#wheelWrap').getBoundingClientRect();
+  return { x: r.left + r.width/2, y: r.top + r.height*0.53 };
+}
+
+/* =====================================================
+   轉轉兔
+   ===================================================== */
+const rabbit = $('#rabbit'), bubble = $('#bubble');
+function rabbitSVG(mood){
+  const D = '#5A3A4A';
+  const eyeDot = (x)=>`<circle cx="${x}" cy="54" r="3.4" fill="${D}"/>`;
+  const arc = (x)=>`<path d="M${x-5} 56 q5 -8 10 0" fill="none" stroke="${D}" stroke-width="3.6" stroke-linecap="round"/>`;
+  let face = '';
+  switch(mood){
+    case 'surprise':
+      face = `<circle cx="38" cy="53" r="4.6" fill="${D}"/><circle cx="62" cy="53" r="4.6" fill="${D}"/>
+              <circle cx="39.5" cy="51.5" r="1.5" fill="#fff"/><circle cx="63.5" cy="51.5" r="1.5" fill="#fff"/>
+              <ellipse cx="50" cy="71" rx="3.2" ry="4.2" fill="${D}"/>`; break;
+    case 'meh':
+      face = eyeDot(38)+eyeDot(62)+`<path d="M43 71 h14" stroke="${D}" stroke-width="3.4" stroke-linecap="round"/>`; break;
+    case 'tense':
+      face = `<circle cx="38" cy="53" r="6" fill="#fff" stroke="${D}" stroke-width="2.6"/><circle cx="62" cy="53" r="6" fill="#fff" stroke="${D}" stroke-width="2.6"/>
+              <circle cx="38" cy="54" r="2.4" fill="${D}"/><circle cx="62" cy="54" r="2.4" fill="${D}"/>
+              <path d="M41 71 q4 -4 8 0 q4 4 8 0" fill="none" stroke="${D}" stroke-width="3" stroke-linecap="round"/>
+              <path d="M82 38 q5 8 0 12 q-5 -4 0 -12z" fill="#9AD3FF" stroke="${D}" stroke-width="2"/>`; break;
+    case 'smug':
+      face = `<path d="M33 54 h10 M57 54 h10" stroke="${D}" stroke-width="3.4" stroke-linecap="round"/>
+              <circle cx="38" cy="57" r="2.6" fill="${D}"/><circle cx="62" cy="57" r="2.6" fill="${D}"/>
+              <path d="M42 69 q10 6 16 -3" fill="none" stroke="${D}" stroke-width="3.4" stroke-linecap="round"/>`; break;
+    case 'excited':
+      face = `<circle cx="38" cy="53" r="5.4" fill="${D}"/><circle cx="62" cy="53" r="5.4" fill="${D}"/>
+              <circle cx="36.5" cy="51" r="2" fill="#fff"/><circle cx="60.5" cy="51" r="2" fill="#fff"/>
+              <path d="M41 66 q9 14 18 0z" fill="#B3335F" stroke="${D}" stroke-width="3" stroke-linejoin="round"/>`; break;
+    case 'cry':
+      face = arc(38)+arc(62)+
+             `<path d="M33 60 q-4 8 0 13 M67 60 q4 8 0 13" fill="none" stroke="#7FC4FF" stroke-width="3.4" stroke-linecap="round"/>
+              <path d="M40 66 q10 16 20 0z" fill="#B3335F" stroke="${D}" stroke-width="3" stroke-linejoin="round"/>`; break;
+    default:
+      face = arc(38)+arc(62)+`<path d="M43 67 q7 8 14 0" fill="none" stroke="${D}" stroke-width="3.4" stroke-linecap="round"/>`;
+  }
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%">
+    <g stroke="${D}" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="34" cy="26" rx="9" ry="20" fill="#FFF6E5" transform="rotate(-8 34 26)"/>
+      <ellipse cx="66" cy="26" rx="9" ry="20" fill="#FFF6E5" transform="rotate(8 66 26)"/>
+      <ellipse cx="34" cy="28" rx="4.4" ry="12" fill="#FF9EC4" stroke="none" transform="rotate(-8 34 28)"/>
+      <ellipse cx="66" cy="28" rx="4.4" ry="12" fill="#FF9EC4" stroke="none" transform="rotate(8 66 28)"/>
+      <ellipse cx="50" cy="62" rx="35" ry="30" fill="#FFF6E5"/>
+    </g>
+    <ellipse cx="42" cy="44" rx="12" ry="5" fill="#fff" opacity=".55"/>
+    <circle cx="26" cy="67" r="6" fill="#FF8FB8" opacity=".6"/><circle cx="74" cy="67" r="6" fill="#FF8FB8" opacity=".6"/>
+    <path d="M47 60 q3 3.5 6 0 q-3 -2.4 -6 0z" fill="#FF6FA8"/>
+    ${face}</svg>`;
+}
+let lastSayAt = -9999, lastPrio = 0;
+const lineIdx = {};
+function say(key, mood, prio){
+  prio = prio || 1;
+  const nowT = performance.now();
+  if (prio < lastPrio && nowT - lastSayAt < 1800) return;
+  const arr = LINES[key]; if (!arr) return;
+  lineIdx[key] = ((lineIdx[key] === undefined ? -1 : lineIdx[key]) + 1 + (arr.length > 2 && Math.random() < .5 ? 1 : 0)) % arr.length;
+  lastSayAt = nowT; lastPrio = prio;
+  bubble.textContent = arr[lineIdx[key]];
+  rabbit.innerHTML = rabbitSVG(mood || 'happy');
+  rabbit.classList.remove('hop'); bubble.classList.remove('pop');
+  void rabbit.offsetWidth;
+  rabbit.classList.add('hop'); bubble.classList.add('pop');
+}
+
+/* =====================================================
+   輪盤資料
+   ===================================================== */
+function bigCount(){ return ['big1','big2','big3'].filter(k => state.up[k]).length; }
+function buildWedges(){
+  const st = STAGES[state.stage];
+  const cnt = {}; st.order.forEach(t => cnt[t] = (cnt[t] || 0) + 1);
+  const w = st.order.map(t => ({ t, area: st.areas[t] / cnt[t] }));
+  w.forEach(x => {
+    if (x.t === 'T' && state.up.swapThief) x.t = 'C';
+    if (x.t === 'A' && state.up.swapAir) x.t = 'C';
+  });
+  const bonus = bigCount() * CFG.bigStep;
+  if (bonus > 0 && state.stage >= 4){
+    const f = w.find(x => x.t === 'F');
+    const pool = w.filter(x => x.t === 'C');
+    const sum = pool.reduce((s,x) => s + x.area, 0);
+    const k = (sum - bonus) / sum;
+    pool.forEach(x => x.area *= k);
+    f.area += bonus;
+  }
+  const total = w.reduce((s,x) => s + x.area, 0);
+  let acc = 0;
+  w.forEach(x => {
+    x.a0 = acc / total * TAU; acc += x.area; x.a1 = acc / total * TAU;
+    x.mid = (x.a0 + x.a1) / 2; x.wd = x.a1 - x.a0;
+  });
+  return w;
+}
+function rebuildWheel(pop){
+  wedges = buildWedges();
+  lastIdx = wedgeIndexAt(wheelRot);
+  wheelDirty = false;
+  if (pop && !state.opt.reduce){ popV = 2.6; }
+}
+function wedgeIndexAt(rot){
+  const phi = norm(-rot);
+  for (let i = 0; i < wedges.length; i++) if (phi >= wedges[i].a0 && phi < wedges[i].a1) return i;
+  return wedges.length - 1;
+}
+const stageChipTxt = () => `階段 ${state.stage}・${STAGES[state.stage].name}`;
+
+/* =====================================================
+   繪圖
+   ===================================================== */
+const canvas = $('#wheel'), ctx = canvas.getContext('2d');
+let size = 320, dpr = 1;
+function resize(){
+  const play = $('#play');
+  const pw = play.clientWidth || window.innerWidth;
+  const wide = window.matchMedia('(min-width:900px)').matches;
+  const h = window.innerHeight;
+  let s = wide ? Math.min(pw - 24, h * 0.6, 520) : Math.min(pw - 24, h * 0.34, 440);
+  s = Math.max(230, Math.floor(s));
+  size = s; dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  canvas.style.width = canvas.style.height = s + 'px';
+  canvas.width = canvas.height = Math.round(s * dpr);
+  const ww = $('#wheelWrap'); ww.style.width = s + 'px'; ww.style.height = s + 'px';
+  sizeFx();
+}
+const EMOJI_FONT = `'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif`;
+function drawSlices(c, cx, cy, R, rot, simple){
+  const S = size;
+  c.save();
+  c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.clip();
+  for (let i = 0; i < wedges.length; i++){
+    const w = wedges[i]; if (w.t === 'F') continue;
+    const a0 = -Math.PI/2 + rot + w.a0, a1 = -Math.PI/2 + rot + w.a1;
+    c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R, a0, a1); c.closePath();
+    c.fillStyle = TYPES[w.t].color; c.fill();
+    if (i % 2){ c.fillStyle = 'rgba(255,255,255,.1)'; c.fill(); }
+    if (!simple && w.wd > 0.03){ c.lineWidth = Math.max(2.4, S * 0.0085); c.strokeStyle = '#5A3A4A'; c.stroke(); }
+  }
+  // 終極格最後畫，疊在最上面
+  for (let i = 0; i < wedges.length; i++){
+    const w = wedges[i]; if (w.t !== 'F') continue;
+    const a0 = -Math.PI/2 + rot + w.a0, a1 = -Math.PI/2 + rot + w.a1;
+    c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R, a0, a1); c.closePath();
+    const g = c.createRadialGradient(cx, cy, R*0.2, cx, cy, R);
+    g.addColorStop(0, '#7B4BE0'); g.addColorStop(1, '#C9A8FF');
+    c.fillStyle = g; c.fill();
+    c.lineWidth = Math.max(1.6, S * 0.006); c.strokeStyle = '#FFD84D'; c.stroke();
+  }
+  if (!simple){
+    for (let i = 0; i < wedges.length; i++){
+      const w = wedges[i]; if (w.t === 'F') continue;
+      const arc = w.wd * R * 0.74;
+      if (arc < 20) continue;
+      const mid = -Math.PI/2 + rot + w.mid;
+      const fs = clamp(arc * 0.62, 14, S * 0.085);
+      c.save();
+      c.translate(cx + Math.cos(mid) * R * 0.74, cy + Math.sin(mid) * R * 0.74);
+      c.rotate(mid + Math.PI/2);
+      c.font = `${fs}px ${EMOJI_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(TYPES[w.t].icon, 0, 0);
+      c.restore();
+    }
+    // 結果高亮
+    if (hl && G - hl.t < 1.0 && wedges[hl.i]){
+      const w = wedges[hl.i];
+      const a0 = -Math.PI/2 + rot + w.a0, a1 = -Math.PI/2 + rot + w.a1;
+      c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R, a0, a1); c.closePath();
+      c.fillStyle = `rgba(255,255,255,${0.55 * (1 - (G - hl.t)) * (0.6 + 0.4 * Math.sin((G - hl.t) * 22))})`; c.fill();
+    }
+  }
+  c.restore();
+}
+function sparkle(c, x, y, r, rot, color){
+  c.save(); c.translate(x, y); c.rotate(rot); c.fillStyle = color;
+  c.beginPath();
+  for (let i = 0; i < 8; i++){
+    const rr = i % 2 ? r * 0.28 : r;
+    const a = i / 8 * TAU;
+    c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+  }
+  c.closePath(); c.fill(); c.restore();
+}
+function draw(spd){
+  const c = ctx, S = size;
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, S, S);
+  const cx = S/2, cy = S*0.53, R = S*0.4, Ro = R + S*0.032, depth = S*0.028;
+  const lw = Math.max(3, S*0.011);
+
+  // 落地陰影
+  c.fillStyle = 'rgba(70,20,60,.24)';
+  c.beginPath(); c.ellipse(cx, cy + Ro + depth + S*0.008, Ro*0.92, Ro*0.12, 0, 0, TAU); c.fill();
+
+  c.save();
+  const sc = 1 + popScale;
+  c.translate(cx, cy); c.scale(sc, sc); c.translate(-cx, -cy);
+
+  // 外圈厚度
+  c.fillStyle = '#A24F79'; c.strokeStyle = '#5A3A4A'; c.lineWidth = lw;
+  c.beginPath(); c.arc(cx, cy + depth, Ro, 0, TAU); c.fill(); c.stroke();
+  // 外圈
+  const rg = c.createLinearGradient(0, cy - Ro, 0, cy + Ro);
+  rg.addColorStop(0, '#FFFFFF'); rg.addColorStop(1, '#FFC4DD');
+  c.fillStyle = rg; c.beginPath(); c.arc(cx, cy, Ro, 0, TAU); c.fill(); c.stroke();
+
+  // 裝飾燈
+  const nDots = 24, tsec = performance.now() / 1000, fast = spd > 4;
+  for (let i = 0; i < nDots; i++){
+    const a = i / nDots * TAU;
+    const on = (Math.floor(tsec * (fast ? 9 : 2.5) + i) % 2) === 0;
+    c.fillStyle = on ? '#FFE45C' : '#FF7FB4';
+    c.beginPath(); c.arc(cx + Math.cos(a) * (R + S*0.016), cy + Math.sin(a) * (R + S*0.016), S*0.0065, 0, TAU); c.fill();
+  }
+
+  // 殘影
+  if (!state.opt.reduce && spd > 9 && state.up.auto){
+    const dir = Math.sign(wheelRot - prevRot) || 1;
+    c.globalAlpha = 0.16; drawSlices(c, cx, cy, R, wheelRot - dir * spd * 0.012, true);
+    c.globalAlpha = 0.1;  drawSlices(c, cx, cy, R, wheelRot - dir * spd * 0.024, true);
+    c.globalAlpha = 1;
+  }
+  drawSlices(c, cx, cy, R, wheelRot, false);
+
+  // 內圈外框
+  c.lineWidth = lw; c.strokeStyle = '#5A3A4A';
+  c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.stroke();
+
+  // 立體光澤（螢幕座標，不隨輪盤轉）
+  c.save(); c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.clip();
+  const lg = c.createLinearGradient(0, cy - R, 0, cy + R);
+  lg.addColorStop(0, 'rgba(255,255,255,.42)'); lg.addColorStop(0.45, 'rgba(255,255,255,0)'); lg.addColorStop(1, 'rgba(90,20,70,.26)');
+  c.fillStyle = lg; c.fillRect(cx - R, cy - R, R*2, R*2);
+  c.restore();
+  c.strokeStyle = 'rgba(255,255,255,.75)'; c.lineWidth = S*0.017; c.lineCap = 'round';
+  c.beginPath(); c.arc(cx, cy, R*0.9, Math.PI*1.08, Math.PI*1.42); c.stroke();
+
+  // 終極格標記（金色閃光＋皇冠，位置永遠看得到）
+  const f = wedges.find(w => w.t === 'F');
+  if (f){
+    const a = -Math.PI/2 + wheelRot + f.mid;
+    const pulse = 1 + 0.25 * Math.sin(tsec * 6);
+    const mx = cx + Math.cos(a) * (R + S*0.016), my = cy + Math.sin(a) * (R + S*0.016);
+    sparkle(c, mx, my, S * 0.05 * pulse, tsec * 0.8, 'rgba(255,230,120,.95)');
+    c.font = `${S*0.05}px ${EMOJI_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.save(); c.translate(cx + Math.cos(a) * R * 0.9, cy + Math.sin(a) * R * 0.9); c.rotate(a + Math.PI/2);
+    c.fillText('👑', 0, 0); c.restore();
+  }
+
+  // 中心
+  const hr = R * 0.19;
+  const hg = c.createRadialGradient(cx - hr*0.3, cy - hr*0.35, hr*0.1, cx, cy, hr);
+  hg.addColorStop(0, '#FFE1EE'); hg.addColorStop(1, '#FF6FA8');
+  c.fillStyle = hg; c.strokeStyle = '#5A3A4A'; c.lineWidth = lw;
+  c.beginPath(); c.arc(cx, cy, hr, 0, TAU); c.fill(); c.stroke();
+  const hs = 1 + hubPop * 0.35;
+  c.font = `${hr*1.05*hs}px ${EMOJI_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.fillText(lastIcon, 0 + cx, cy + hr*0.05);
+  c.restore();
+
+  // 指針
+  const pr = S*0.04, tipY = cy - R + S*0.045, pivY = tipY - S*0.1;
+  c.save(); c.translate(cx, pivY); c.rotate(pointerA);
+  c.lineWidth = lw; c.strokeStyle = '#5A3A4A'; c.lineJoin = 'round';
+  const pg = c.createLinearGradient(0, -pr, 0, tipY - pivY);
+  pg.addColorStop(0, '#FF9CC6'); pg.addColorStop(1, '#F0307F');
+  c.fillStyle = pg;
+  c.beginPath();
+  c.moveTo(0, tipY - pivY);
+  c.bezierCurveTo(-pr*1.25, (tipY - pivY)*0.35, -pr*1.1, -pr*0.4, 0, -pr*0.9);
+  c.bezierCurveTo(pr*1.1, -pr*0.4, pr*1.25, (tipY - pivY)*0.35, 0, tipY - pivY);
+  c.closePath(); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.75)';
+  c.beginPath(); c.ellipse(-pr*0.38, -pr*0.28, pr*0.22, pr*0.38, -0.5, 0, TAU); c.fill();
+  c.restore();
+}
+let prevRot = 0;
+
+/* =====================================================
+   浮動文字／提示
+   ===================================================== */
+const floaters = $('#floaters');
+function floatText(txt, cls, dx, dy){
+  const e = document.createElement('div');
+  e.className = 'fl ' + (cls || '');
+  e.textContent = txt;
+  e.style.left = `calc(50% + ${dx || rand(-30,30)}px)`;
+  e.style.top = `calc(${40 + (dy || 0)}% )`;
+  floaters.appendChild(e);
+  e.addEventListener('animationend', () => e.remove());
+  setTimeout(() => e.remove(), 2600);
+}
+function toast(txt){
+  const e = document.createElement('div'); e.className = 'toast'; e.textContent = txt;
+  $('#toasts').appendChild(e);
+  setTimeout(() => e.remove(), 3300);
+}
+
+/* =====================================================
+   成就
+   ===================================================== */
+function unlock(id){
+  if (state.ach[id]) return;
+  state.ach[id] = 1;
+  const a = ACH.find(x => x.id === id);
+  toast('🏆 成就解鎖：' + a.name);
+  sfx.star();
+  saveNow();
+}
+function checkAch(){
+  if (state.dodged >= 5) unlock('thief');
+  if (state.near >= 3) unlock('near');
+  if (state.bad >= 3) unlock('unlucky');
+  if (state.perfects >= 10) unlock('perfect');
+  if (state.coins >= 1000) unlock('rich');
+  if (state.up.auto && !state.finished && G - lastClickG >= 60) unlock('zen');
+}
+
+/* =====================================================
+   事件／效果
+   ===================================================== */
+const effectIs = id => effect && effect.id === id;
+function autoInterval(){
+  const k = state.up.speed2 ? 2 : state.up.speed1 ? 1 : 0;
+  return CFG.autoBase[k];
+}
+function candyMul(){ return state.up.candy2 ? 2 : state.up.candy1 ? 1.5 : 1; }
+function gain(n){
+  const m = effectIs('gold') ? CFG.goldMul : 1;
+  n = Math.round(n * m);
+  state.coins += n;
+  state.maxCoins = Math.max(state.maxCoins, state.coins);
+  return n;
+}
+function triggerEvent(){
+  const id = pick(Object.keys(EVT));
+  const e = EVT[id];
+  sfx.event();
+  floatText(`${e.icon} ${e.name}！${e.desc}`, 'big', 0, -22);
+  say('event', 'surprise', 2);
+  switch(id){
+    case 'gold':    effect = { id, until: G + CFG.goldDur, total: CFG.goldDur }; break;
+    case 'rainbow': effect = { id, until: G + CFG.rainbowDur, total: CFG.rainbowDur }; break;
+    case 'gemrain': effect = { id, spins: CFG.gemRainSpins }; break;
+    case 'meteor':
+      state.luck = Math.min(CFG.luckMax, Math.round((state.luck + CFG.luckMeteor) * 10) / 10);
+      floatText(`🍀 幸運值 +${CFG.luckMeteor}`, 'good', 0, 8);
+      burst(wheelCenter().x, wheelCenter().y, 30, {colors:['#7DFFC0','#fff','#FFE45C']});
+      break;
+    case 'candyrain': {
+      const n = gain(Math.max(CFG.candyRainMin, state.coins * CFG.candyRainPct));
+      floatText(`+${fmt(n)} 🪙`, 'gain', 0, 8);
+      burst(wheelCenter().x, wheelCenter().y, 40, {colors:['#FF6FA8','#FFD84D','#fff']});
+      sfx.coin();
+      break; }
+    case 'stuck':
+      effect = { id, until: G + CFG.stuckMax, taps: 0 };
+      say('stuck', 'surprise', 3);
+      break;
+  }
+}
+function fixTap(){
+  effect.taps++;
+  sfx.fix();
+  rabbit.classList.remove('hop'); void rabbit.offsetWidth; rabbit.classList.add('hop');
+  if (effect.taps >= CFG.stuckTaps){
+    const n = gain(CFG.stuckReward);
+    floatText(`+${n} 🪙`, 'gain'); sfx.coin();
+    burst(wheelCenter().x, wheelCenter().y, 36);
+    effect = null; say('fixed', 'happy', 3);
+    autoNext = Math.max(autoNext, G + 0.6);
+  }
+}
+
+/* =====================================================
+   旋轉
+   ===================================================== */
+const ease = (u, e) => smooth(u / 0.1) * (1 - Math.pow(1 - u, e));
+function pickWedge(){
+  const fi = wedges.findIndex(x => x.t === 'F');
+  if (state.luck >= CFG.luckMax - 1e-9) return fi;
+  let r = Math.random() * wedges.reduce((s,x) => s + x.area, 0);
+  for (let i = 0; i < wedges.length; i++){ r -= wedges[i].area; if (r <= 0) return i; }
+  return wedges.length - 1;
+}
+function startSpin(){
+  if (spin || state.finished || effectIs('stuck')) return;
+  started = true;
+  if (wheelDirty) rebuildWheel(true);
+  const n = wedges.length;
+  const w = pickWedge();
+  const fi = wedges.findIndex(x => x.t === 'F');
+  const isF = w === fi;
+  const adj = !isF && (((w + 1) % n === fi) || ((w - 1 + n) % n === fi));
+  const near = adj && state.stage >= 2 && (state.spins - state.lastNear >= CFG.nearCooldown);
+  let D = state.up.auto ? Math.max(1.4, autoInterval() - CFG.pauseAfter) : CFG.manualDur;
+  if (state.up.auto && effectIs('rainbow')) D *= CFG.rainbowFactor;
+  let extra = 0, ex = 3;
+  if (isF){ extra = CFG.finalExtra; ex = 5; }
+  else if (near){ extra = CFG.nearExtra; ex = 5; }
+  D += extra;
+  const wd = wedges[w];
+  const phi = wd.a0 + wd.wd * (isF ? 0.5 : rand(0.15, 0.85));
+  const turns = Math.max(3, Math.round(D * 1.5));
+  const m = Math.ceil((wheelRot + turns * TAU + phi) / TAU);
+  const target = m * TAU - phi;
+  const W = Math.min(1.4, D * 0.42);
+  const ringDur = W * 0.8;
+  const ringStart = G + D - W - 0.15;
+  spin = { start:G, D, extra, ex, rot0:wheelRot, target, phi, w, w0:w, near, isF,
+           ringUsed:false, nudge:null, hb:0, ringStart, ringT:ringStart + ringDur, dodge:false };
+  autoNext = Infinity;
+  ac();
+}
+function rotAt(t){
+  const s = spin;
+  const u = clamp((t - s.start) / s.D, 0, 1);
+  let r = s.rot0 + (s.target - s.rot0) * ease(u, s.ex);
+  if (s.nudge) r += s.nudge.delta * smooth((t - s.nudge.ts) / s.nudge.dur);
+  return r;
+}
+function tryNudge(kind){
+  const s = spin, n = wedges.length, cur = wedges[s.w];
+  if (cur.t === 'F') return false;
+  if (kind === 'good' && cur.t !== 'T') return false;
+  const cands = [(s.w + n - 1) % n, (s.w + 1) % n].filter(i => wedges[i].t !== 'F');
+  let best = -1, br = TYPES[cur.t].rank;
+  cands.forEach(i => { const r = TYPES[wedges[i].t].rank; if (r > br){ br = r; best = i; } });
+  if (best < 0) return false;
+  const nw = wedges[best];
+  const phi1 = nw.a0 + nw.wd * rand(0.2, 0.8);
+  let delta = -(phi1 - s.phi);
+  delta = ((delta + Math.PI) % TAU + TAU) % TAU - Math.PI;
+  const remain = (s.start + s.D) - G - 0.05;
+  s.nudge = { ts:G, dur:clamp(Math.min(0.5, remain), 0.12, 0.5), delta };
+  if (cur.t === 'T' && nw.t !== 'T'){ s.dodge = true; state.dodged++; }
+  s.phi = phi1; s.w = best;
+  return true;
+}
+function timingClick(){
+  const s = spin;
+  if (s.ringUsed || G < s.ringStart || G > s.ringT + 0.3) return;
+  s.ringUsed = true;
+  const d = Math.abs(G - s.ringT);
+  const ringEl = $('#ring');
+  if (d <= CFG.perfectWin){
+    state.perfects++;
+    sfx.perfect(); floatText('完美！', 'good', 0, -14);
+    ringEl.classList.add('perfect');
+    const moved = tryNudge('perfect');
+    if (!moved && Math.random() < 0.5) say('perfect', 'smug', 1);
+  } else if (d <= CFG.goodWin){
+    sfx.good(); floatText('不錯！', 'ok', 0, -14);
+    tryNudge('good');
+  } else {
+    sfx.miss(); floatText('差一點', 'miss', 0, -14);
+  }
+}
+function settle(){
+  const s = spin;
+  wheelRot = norm(s.target + (s.nudge ? s.nudge.delta : 0));
+  spin = null;
+  prevRot = wheelRot;
+  $('#wheelWrap').classList.remove('tense');
+  lastIdx = wedgeIndexAt(wheelRot);
+  applyResult(s);
+  if (!state.finished){
+    autoNext = Math.max(s.start + autoInterval() * (effectIs('rainbow') ? CFG.rainbowFactor : 1), G + 0.35);
+    if (wheelDirty) rebuildWheel(true);
+  }
+}
+function applyResult(s){
+  const w = s.w, t = wedges[w].t;
+  const c = wheelCenter();
+  state.spins++;
+  lastIcon = TYPES[t].icon; hubPop = 1; hl = { i:w, t:G };
+  if (t !== 'F' && state.stage >= 3){
+    state.luck = Math.min(CFG.luckMax, Math.round((state.luck + CFG.luckPerSpin) * 10) / 10);
+  }
+  state.bad = (t === 'A' || t === 'T') ? state.bad + 1 : 0;
+
+  switch(t){
+    case 'C': case 'G': {
+      let kind = t;
+      if (t === 'C' && effectIs('gemrain')){
+        kind = 'G';
+        effect.spins--; if (effect.spins <= 0) effect = null;
+      }
+      const base = (kind === 'G' ? CFG.gem : CFG.candy) * candyMul();
+      const n = gain(base);
+      floatText(`+${fmt(n)} 🪙`, 'gain');
+      if (kind === 'G'){ sfx.gem(); say('gem', 'happy', 2); burst(c.x, c.y, 26, {colors:['#FFD84D','#fff','#FFF3A0']}); }
+      else { sfx.coin(); if (Math.random() < 0.2) say('candy', 'happy', 0); }
+      break; }
+    case 'A':
+      sfx.air(); floatText('💨 空空的', 'miss');
+      say('air', 'meh', 1);
+      break;
+    case 'T': {
+      const loss = Math.min(state.coins, clamp(Math.round(state.coins * CFG.thiefPct), CFG.thiefMin, CFG.thiefMax));
+      state.coins -= loss;
+      floatText(`-${fmt(loss)} 🪙`, 'loss');
+      sfx.thief(); say('thief', 'surprise', 2);
+      break; }
+    case 'S':
+      state.luck = Math.min(CFG.luckMax, Math.round((state.luck + CFG.luckStar) * 10) / 10);
+      floatText(`🍀 幸運值 +${CFG.luckStar}`, 'good');
+      sfx.star(); say('star', 'happy', 1);
+      burst(c.x, c.y, 16, {colors:['#7DFFC0','#fff']});
+      break;
+    case 'E':
+      triggerEvent();
+      break;
+    case 'F':
+      break;
+  }
+  if (s.dodge){ say('dodge', 'smug', 3); }
+  if (s.near && t !== 'F'){
+    state.near++; state.lastNear = state.spins;
+    say('near', 'tense', 4);
+  }
+  if (!luckAnnounced && state.luck >= CFG.luckMax){
+    luckAnnounced = true;
+    say('luckfull', 'excited', 5);
+    toast('🍀 幸運值已滿！下一轉必中！');
+    sfx.stage();
+  }
+  state.maxCoins = Math.max(state.maxCoins, state.coins);
+  checkAch();
+  if (t === 'F') win();
+  else if (state.spins % 5 === 0) saveNow();
+}
+
+/* =====================================================
+   商店
+   ===================================================== */
+const shopList = $('#shopList'), cardEls = {};
+function buildShop(){
+  shopList.innerHTML = '';
+  UPS.forEach(u => {
+    const el = document.createElement('button');
+    el.className = 'card';
+    el.innerHTML = `<span class="cic"></span><span class="ctx"><b class="cn"></b><small class="cd"></small></span><span class="cp"></span>`;
+    el.addEventListener('click', () => buy(u.id));
+    shopList.appendChild(el);
+    cardEls[u.id] = el;
+  });
+  refreshShop();
+}
+function isUnlocked(u){ return u.stage <= state.stage && (!u.req || state.up[u.req]); }
+function refreshShop(){
+  UPS.forEach(u => {
+    const el = cardEls[u.id];
+    const owned = !!state.up[u.id];
+    const ok = isUnlocked(u);
+    el.classList.toggle('owned', owned);
+    el.classList.toggle('locked', !ok && !owned);
+    el.querySelector('.cic').textContent = ok || owned ? u.ic : '❔';
+    el.querySelector('.cn').textContent = ok || owned ? u.name : '？？？';
+    let d = u.desc;
+    if (!ok && !owned){
+      if (u.stage > state.stage) d = '到下一階段後解鎖';
+      else { const r = UPS.find(x => x.id === u.req); d = `需要先買「${r.name}」`; }
+    }
+    el.querySelector('.cd').textContent = d;
+    el.querySelector('.cp').textContent = owned ? '✓ 已購買' : fmt(u.price);
+  });
+  updateAfford();
+}
+function updateAfford(){
+  UPS.forEach(u => {
+    const el = cardEls[u.id];
+    const can = !state.up[u.id] && isUnlocked(u) && state.coins >= u.price;
+    el.classList.toggle('can', can && !state.opt.reduce);
+    el.classList.toggle('poor', !state.up[u.id] && isUnlocked(u) && !can);
+  });
+}
+function buy(id){
+  const u = UPS.find(x => x.id === id);
+  if (!u || state.up[id] || !isUnlocked(u) || state.finished) return;
+  if (state.coins < u.price){ sfx.deny(); floatText('金幣不夠喔', 'miss'); return; }
+  ac();
+  lastClickG = G;
+  state.coins -= u.price;
+  state.up[id] = true;
+  sfx.buy();
+  const r = cardEls[id].getBoundingClientRect();
+  burst(r.left + r.width/2, r.top + r.height/2, 30);
+  const stageBefore = state.stage;
+  if (u.fx) u.fx();
+  if (state.stage === stageBefore){
+    say('buy', 'happy', 2);
+    if (['swapThief','swapAir','big1','big2','big3'].includes(id)) requestRebuild();
+  }
+  if (id === 'auto') autoNext = G + 0.6;
+  refreshShop();
+  saveNow();
+}
+function requestRebuild(){
+  if (spin) wheelDirty = true; else rebuildWheel(true);
+}
+function setStage(n){
+  state.stage = n;
+  document.body.dataset.stage = String(n);
+  requestRebuild();
+  sfx.stage();
+  const c = wheelCenter();
+  burst(c.x, c.y, 90, {full:true, power:520});
+  say('stage', 'excited', 5);
+  toast(`✨ 進入階段 ${n}：${STAGES[n].name}`);
+  refreshShop();
+}
+
+/* =====================================================
+   通關／視窗
+   ===================================================== */
+const modal = $('#modal'), sheet = $('#sheet');
+function openModal(html){ sheet.innerHTML = html; modal.classList.add('on'); }
+function closeModal(){ modal.classList.remove('on'); }
+modal.addEventListener('click', e => { if (e.target === modal && !state.finished) closeModal(); });
+const mmss = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+function statsRows(){
+  return `<div class="row"><span>遊玩時間</span><b>${mmss(G)}</b></div>
+    <div class="row"><span>總轉動次數</span><b>${fmt(state.spins)}</b></div>
+    <div class="row"><span>完美時機</span><b>${fmt(state.perfects)}</b></div>
+    <div class="row"><span>近失次數</span><b>${fmt(state.near)}</b></div>
+    <div class="row"><span>躲開小偷</span><b>${fmt(state.dodged)}</b></div>
+    <div class="row"><span>最高金幣</span><b>${fmt(state.maxCoins)}</b></div>`;
+}
+function achRows(onlyUnlocked){
+  return ACH.filter(a => !onlyUnlocked || state.ach[a.id]).map(a => state.ach[a.id]
+    ? `<div class="ach"><i>🏆</i><span><b>${a.name}</b>　${a.desc}</span></div>`
+    : `<div class="ach lock"><i>🔒</i><span><b>？？？</b>　${a.desc}</span></div>`).join('');
+}
+function showStats(){
+  openModal(`<h3>📊 統計與成就</h3>${statsRows()}<h3 style="margin-top:16px;font-size:18px">成就</h3>${achRows(false)}
+    <button class="btn alt" id="mClose">關閉</button>`);
+  $('#mClose').onclick = closeModal;
+}
+const INTRO = [
+  {m:'happy',   h:'歡迎來到轉轉機！', t:'嗨，我是轉轉兔！這個輪盤上藏著一格超級小的「終極格」👑，轉到它就通關！'},
+  {m:'smug',    h:'一開始它小到看不見', t:'剛開始終極格只有 0.02%，幾乎轉不到。所以要先轉輪盤賺金幣🪙，再到商店買升級，讓輪盤變好轉、變好賺、終極格越變越大。'},
+  {m:'excited', h:'抓準時機點一下', t:'輪盤快停時會出現圈圈，顏色由藍、黃變成亮綠。圈圈縮到白色虛線框、變成亮綠的瞬間按下按鈕，就能把停點推到更好的格子，還能躲開小偷🦝。'},
+  {m:'tense',   h:'幸運值是你的保底', t:'後期畫面上方的綠色幸運值會慢慢累積，滿了之後下一轉保證中終極格。目標：大約 10 分鐘內轉到👑！準備好了嗎？'}
+];
+function showIntro(i){
+  const p = INTRO[i], last = i === INTRO.length - 1;
+  openModal(`<div style="width:96px;height:96px;margin:0 auto 6px">${rabbitSVG(p.m)}</div>
+    <h3>${p.h}</h3>
+    <p style="font-size:16px;line-height:1.65;margin:8px 4px 0;text-align:center">${p.t}</p>
+    <div style="text-align:center;opacity:.6;margin-top:8px;font-size:14px">${i + 1} / ${INTRO.length}</div>
+    <button class="btn" id="iNext">${last ? '開始轉！' : '下一步'}</button>
+    ${last ? '' : '<button class="btn alt" id="iSkip" style="margin-top:10px;min-width:120px;font-size:15px;padding:6px 16px">跳過說明</button>'}`);
+  const finish = () => { state.opt.intro = true; closeModal(); saveNow(); say('open', 'happy', 9); };
+  $('#iNext').onclick = () => { ac(); if (last) finish(); else showIntro(i + 1); };
+  const sk = $('#iSkip'); if (sk) sk.onclick = finish;
+}
+function showSettings(){
+  const html = () => `<h3>⚙️ 設定</h3>
+    <button class="btn alt" id="oHelp">📖 遊戲說明</button>
+    <button class="btn alt" id="oSound">${state.opt.mute ? '🔇 音效：關' : '🔊 音效：開'}</button>
+    <button class="btn alt" id="oReduce">${state.opt.reduce ? '減少動態效果：開' : '減少動態效果：關'}</button>
+    <button class="btn warn" id="oRestart">重新開始</button>
+    <button class="btn alt" id="mClose">關閉</button>`;
+  openModal(html());
+  const bind = () => {
+    $('#oSound').onclick = () => { state.opt.mute = !state.opt.mute; openModal(html()); bind(); saveNow(); };
+    $('#oReduce').onclick = () => { state.opt.reduce = !state.opt.reduce; applyOpt(); openModal(html()); bind(); saveNow(); };
+    $('#oHelp').onclick = () => showIntro(0);
+    let armed = false;
+    $('#oRestart').onclick = e => {
+      if (!armed){ armed = true; e.target.textContent = '再按一次確認重來（成就保留）'; return; }
+      closeModal(); restart();
+    };
+    $('#mClose').onclick = closeModal;
+  };
+  bind();
+}
+function applyOpt(){ document.body.classList.toggle('reduce', !!state.opt.reduce); updateAfford(); }
+function win(){
+  state.finished = true;
+  if (state.stage < 3) unlock('lucky');
+  if (G < 480) unlock('fast');
+  saveNow();
+  say('win', 'cry', 9);
+  const c = wheelCenter();
+  sfx.fanfare();
+  burst(c.x, c.y, 140, {full:true, power:640, colors:['#A06CFF','#FFD84D','#fff','#FF6FA8']});
+  setTimeout(() => burst(c.x, c.y, 120, {full:true, power:560}), 500);
+  setTimeout(() => { burst(window.innerWidth*0.2, window.innerHeight*0.5, 80); burst(window.innerWidth*0.8, window.innerHeight*0.5, 80); }, 1000);
+  setTimeout(showWin, 1400);
+}
+function showWin(){
+  openModal(`<div class="crown">👑</div><h3>通關啦！你是命運的主人</h3>
+    ${statsRows()}
+    <h3 style="margin-top:16px;font-size:18px">已解鎖成就</h3>${achRows(true) || '<div class="ach">還沒有成就，下次挑戰看看！</div>'}
+    <button class="btn" id="again">再玩一次</button>`);
+  $('#again').onclick = () => { closeModal(); restart(); };
+}
+function restart(){
+  const ach = state.ach, opt = state.opt;
+  state = freshState(); state.ach = ach; state.opt = opt;
+  started = false; G = 0; spin = null; effect = null; autoNext = 0; wheelDirty = false; lastClickG = 0;
+  luckAnnounced = false; wheelRot = 0; hl = null; lastIcon = '⭐'; parts = [];
+  document.body.dataset.stage = '1';
+  $('#wheelWrap').classList.remove('tense', 'stuck');
+  rebuildWheel(true); refreshShop(); applyOpt(); saveNow();
+  say('open', 'happy', 9);
+  showIntro(0);
+}
+
+/* =====================================================
+   操作
+   ===================================================== */
+const spinBtn = $('#spinBtn');
+function onBtn(){
+  if (state.finished) return;
+  ac();
+  lastClickG = G;
+  if (effectIs('stuck')){ fixTap(); return; }
+  if (spin){ timingClick(); return; }
+  startSpin();
+}
+spinBtn.addEventListener('click', onBtn);
+document.addEventListener('keydown', e => {
+  if ((e.code === 'Space' || e.code === 'Enter') && document.activeElement !== spinBtn && !modal.classList.contains('on')
+      && !(document.activeElement && document.activeElement.tagName === 'BUTTON')){
+    e.preventDefault(); onBtn(); spinBtn.classList.add('press'); setTimeout(() => spinBtn.classList.remove('press'), 100);
+  }
+});
+$('#btnStats').addEventListener('click', () => { ac(); showStats(); });
+$('#btnSet').addEventListener('click', () => { ac(); showSettings(); });
+window.addEventListener('resize', resize);
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
+
+/* ---------- 測試模式：連點標題 5 次 ---------- */
+(function(){
+  let taps = [];
+  $('#logo').addEventListener('click', () => {
+    const n = performance.now(); taps = taps.filter(t => n - t < 3000); taps.push(n);
+    if (taps.length >= 5){ taps = []; $('#debug').classList.toggle('on'); }
+  });
+  const dbg = $('#debug');
+  const add = (label, fn) => { const b = document.createElement('button'); b.textContent = label; b.onclick = fn; dbg.appendChild(b); };
+  add('+1000 金幣', () => { state.coins += 1000; });
+  add('幸運值 99', () => { state.luck = 99; });
+  add('速度 ×1', () => { speedMul = 1; });
+  add('速度 ×5', () => { speedMul = 5; });
+  add('下一階段', () => {
+    const n = Math.min(4, state.stage + 1);
+    if (n >= 2) state.up.auto = true;
+    if (n >= 3) state.up.expand = true;
+    if (n >= 4) state.up.lens = true;
+    setStage(n); if (n === 2) autoNext = G + 0.5;
+  });
+  add('清空存檔', () => { try { localStorage.removeItem(KEY); } catch(e){} });
+})();
+
+/* =====================================================
+   主迴圈
+   ===================================================== */
+const el = {
+  coin: $('#coinTxt'), coinChip: $('#coinChip'), time: $('#timeTxt'), stage: $('#stageChip'),
+  luckWrap: $('#luckWrap'), luckFill: $('#luckFill'), luckNum: $('#luckNum'),
+  pill: $('#fxpill'), pillName: $('#fxName'), pillFill: $('#fxFill'),
+  ring: $('#ring'), ringT: $('#ringTarget'), wrap: $('#wheelWrap')
+};
+let dispCoins = state.coins, lastCoinShown = -1, lastBtnKey = '', lastAfford = -1, lastHB = 0, lastTimeShown = '';
+let last = performance.now();
+
+function frame(now){
+  const rdt = Math.min(0.1, (now - last) / 1000); last = now;
+  const dt = rdt * speedMul;
+  if (!document.hidden && started){ G += dt; }
+
+  // 效果計時
+  if (effect && effect.until !== undefined && G >= effect.until){
+    if (effect.id === 'stuck'){ say('stuckfail', 'happy', 2); autoNext = Math.max(autoNext, G + 0.6); }
+    effect = null;
+  }
+
+  // 旋轉
+  let spd = 0;
+  if (spin){
+    const u = (G - spin.start) / spin.D;
+    if (u >= 1) settle();
+    else {
+      const r = rotAt(G);
+      spd = Math.abs(r - wheelRot) / Math.max(rdt, 0.001);
+      wheelRot = r;
+      const idx = wedgeIndexAt(wheelRot);
+      if (idx !== lastIdx){
+        lastIdx = idx;
+        sfx.tick(spd);
+        pointerV -= 6 + 10 * (1 - Math.min(1, spd / 18));
+      }
+      // 近失／終局的緊張演出
+      if (spin.extra > 0 && G > spin.start + spin.D - spin.extra){
+        el.wrap.classList.add('tense');
+        if (G - spin.hb > 0.7){ spin.hb = G; sfx.heart(); }
+      }
+    }
+  }
+  // 自動旋轉
+  if (!spin && !state.finished && state.up.auto && !effectIs('stuck') && G >= autoNext) startSpin();
+
+  // 指針彈簧
+  pointerV += (-pointerA * 260 - pointerV * 14) * rdt;
+  pointerA += pointerV * rdt;
+  pointerA = clamp(pointerA, -0.6, 0.6);
+  // 彈跳／高亮衰減
+  popV += (-popScale * 240 - popV * 9) * rdt; popScale += popV * rdt;
+  if (Math.abs(popScale) < 0.0005 && Math.abs(popV) < 0.05){ popScale = 0; popV = 0; }
+  hubPop = Math.max(0, hubPop - rdt * 3);
+
+  draw(spd);
+  prevRot = wheelRot;
+  stepFx(rdt);
+  updateHUD(rdt);
+  if (Math.floor(G) % 20 === 0 && Math.floor(G) !== lastHB){ lastHB = Math.floor(G); checkAch(); }
+  requestAnimationFrame(frame);
+}
+
+/* 時機圈顏色：藍(還早)→黃(接近)→亮綠(現在按!)→紅(錯過) */
+function ringColor(d, far){
+  const st = [[far,[124,196,255]],[Math.min(-0.25, far*0.45),[255,228,92]],[-0.2,[166,255,106]],[-0.08,[61,255,160]],[0.08,[61,255,160]],[0.2,[166,255,106]],[0.25,[255,107,107]]];
+  if (d <= st[0][0]) return st[0][1];
+  for (let i = 1; i < st.length; i++){
+    if (d <= st[i][0]){
+      const a = st[i-1], b = st[i], k = (d - a[0]) / (b[0] - a[0]);
+      return a[1].map((v, j) => Math.round(v + (b[1][j] - v) * k));
+    }
+  }
+  return st[st.length-1][1];
+}
+function updateHUD(rdt){
+  dispCoins += (state.coins - dispCoins) * Math.min(1, rdt * 10);
+  if (Math.abs(state.coins - dispCoins) < 0.5) dispCoins = state.coins;
+  const shown = Math.round(dispCoins);
+  if (shown !== lastCoinShown){
+    if (shown > lastCoinShown && lastCoinShown >= 0 && !state.opt.reduce){ el.coinChip.classList.remove('bump'); void el.coinChip.offsetWidth; el.coinChip.classList.add('bump'); }
+    lastCoinShown = shown; el.coin.textContent = fmt(shown);
+  }
+  if (state.coins !== lastAfford){ lastAfford = state.coins; updateAfford(); }
+  const ts = mmss(G);
+  if (ts !== lastTimeShown){ lastTimeShown = ts; el.time.textContent = ts; }
+  el.stage.textContent = stageChipTxt();
+  // 幸運值
+  const showLuck = state.stage >= 3;
+  el.luckWrap.classList.toggle('on', showLuck);
+  if (showLuck){
+    el.luckFill.style.width = clamp(state.luck, 0, 100) + '%';
+    el.luckNum.textContent = Math.floor(state.luck) + '';
+    el.luckWrap.classList.toggle('full', state.luck >= CFG.luckMax);
+  }
+  // 事件條
+  if (effect && effect.id !== 'stuck'){
+    const e = EVT[effect.id];
+    el.pill.classList.add('on');
+    let frac;
+    if (effect.until !== undefined){ frac = (effect.until - G) / effect.total; el.pillName.textContent = `${e.icon} ${e.name} ${Math.max(0, Math.ceil(effect.until - G))}s`; }
+    else { frac = effect.spins / CFG.gemRainSpins; el.pillName.textContent = `${e.icon} ${e.name} 剩 ${effect.spins} 轉`; }
+    el.pillFill.style.width = clamp(frac, 0, 1) * 100 + '%';
+  } else el.pill.classList.remove('on');
+  el.wrap.classList.toggle('stuck', effectIs('stuck'));
+
+  // 主按鈕文字
+  let key, cls;
+  if (state.finished){ key = '通關！'; cls = ''; }
+  else if (effectIs('stuck')){ key = `修理！${effect.taps}/${CFG.stuckTaps}`; cls = 'fix'; }
+  else if (spin){ key = state.up.auto ? '自動中' : '轉動中…'; cls = (state.up.auto ? 'auto ' : '') + 'busy'; }
+  else if (state.up.auto){ key = '自動中'; cls = 'auto'; }
+  else { key = '轉！'; cls = ''; }
+  if (key !== lastBtnKey){ lastBtnKey = key; spinBtn.textContent = key; spinBtn.className = cls; }
+
+  // 時機圈
+  if (spin && !spin.ringUsed && G >= spin.ringStart && G <= spin.ringT + 0.25){
+    const u = clamp((G - spin.ringStart) / (spin.ringT - spin.ringStart), 0, 1.3);
+    const sc = 1 + Math.max(0, 1 - u) * 0.5;
+    el.ring.style.opacity = u > 1 ? Math.max(0, 1 - (u - 1) * 3) : 1;
+    el.ring.style.transform = `scale(${sc * 1.0})`;
+    el.ringT.style.opacity = 0.9;
+    const dd = G - spin.ringT, far = -Math.max(spin.ringT - spin.ringStart, 0.5);
+    const col = ringColor(dd, far), rgb = col.join(',');
+    const hot = Math.abs(dd) <= CFG.perfectWin;
+    el.ring.style.borderColor = `rgb(${rgb})`;
+    el.ring.style.boxShadow = `0 0 ${hot ? 26 : 12}px ${hot ? 5 : 2}px rgba(${rgb},.9), 0 0 0 3px var(--line)`;
+    el.ringT.style.borderColor = hot ? `rgb(${rgb})` : '#fff';
+  } else {
+    el.ring.style.opacity = 0; el.ringT.style.opacity = 0;
+    if (!spin) el.ring.classList.remove('perfect');
+  }
+}
+
+/* =====================================================
+   啟動
+   ===================================================== */
+resize();
+document.body.dataset.stage = String(state.stage);
+rebuildWheel(false);
+buildShop();
+applyOpt();
+if (state.up.auto) autoNext = G + 1;
+rabbit.innerHTML = rabbitSVG('happy');
+if (state.spins === 0){ say('open', 'happy', 9); showIntro(0); }
+else { bubble.textContent = '歡迎回來！繼續轉吧～'; }
+dispCoins = state.coins;
+requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
